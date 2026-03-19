@@ -196,9 +196,9 @@ function getDirSize(dirPath) {
 // Create backup
 async function createBackup(type = 'manual', options = {}) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const hostname = os.hostname();
     const patterns = options.patterns || [];
-    const suffix = patterns.length > 0 ? `_patterns_${patterns.length}` : '';
-    const backupName = `openclaw_${type}_backup_${timestamp}${suffix}`;
+    const backupName = `${hostname}_${type}_${timestamp}`;
     const backupPath = path.join(BACKUP_DIR, backupName);
     
     fs.mkdirSync(backupPath, { recursive: true });
@@ -237,6 +237,23 @@ async function createBackup(type = 'manual', options = {}) {
     cleanupBackups();
     
     return `${backupName}.tar.gz`;
+}
+
+// Simple copy directory function
+function copyDir(src, dest) {
+    if (!fs.existsSync(src)) return;
+    fs.mkdirSync(dest, { recursive: true });
+    const items = fs.readdirSync(src);
+    for (const item of items) {
+        const srcPath = path.join(src, item);
+        const destPath = path.join(dest, item);
+        const stat = fs.statSync(srcPath);
+        if (stat.isDirectory()) {
+            copyDir(srcPath, destPath);
+        } else {
+            fs.copyFileSync(srcPath, destPath);
+        }
+    }
 }
 
 // Restore backup
@@ -666,10 +683,18 @@ const server = http.createServer(async (req, res) => {
             req.on('end', async () => {
                 const buffer = Buffer.concat(chunks);
                 
-                // Extract filename from Content-Disposition header
-                const contentDisposition = req.headers['content-disposition'] || '';
-                const match = contentDisposition.match(/filename="(.+)"/);
-                const originalName = match ? match[1] : 'uploaded_backup.tar.gz';
+                // Extract filename from multipart form data
+                const contentType = req.headers['content-type'] || '';
+                let originalName = 'uploaded_backup.tar.gz';
+                
+                if (contentType.includes('multipart/form-data')) {
+                    const boundary = contentType.split('boundary=')[1];
+                    const body = buffer.toString('binary');
+                    const filenameMatch = body.match(new RegExp('filename="([^"]+)"'));
+                    if (filenameMatch) {
+                        originalName = filenameMatch[1];
+                    }
+                }
                 
                 // Validate it's a tar.gz file
                 if (!originalName.endsWith('.tar.gz')) {
@@ -678,13 +703,11 @@ const server = http.createServer(async (req, res) => {
                     return;
                 }
                 
-                // Sanitize filename
-                const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
-                const uploadPath = path.join(BACKUP_DIR, safeName);
+                const uploadPath = path.join(BACKUP_DIR, originalName);
                 fs.writeFileSync(uploadPath, buffer);
                 
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ success: true, filename: safeName }));
+                res.end(JSON.stringify({ success: true, filename: originalName }));
             });
             return;
         }
