@@ -154,6 +154,25 @@ function formatSize(bytes) {
     return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
 }
 
+function getDirSize(dirPath) {
+    let size = 0;
+    try {
+        const items = fs.readdirSync(dirPath);
+        for (const item of items) {
+            const itemPath = path.join(dirPath, item);
+            try {
+                const stat = fs.statSync(itemPath);
+                if (stat.isDirectory()) {
+                    size += getDirSize(itemPath);
+                } else {
+                    size += stat.size;
+                }
+            } catch (e) {}
+        }
+    } catch (e) {}
+    return size;
+}
+
 // Create backup
 async function createBackup(type = 'manual', options = {}) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -771,6 +790,25 @@ const server = http.createServer(async (req, res) => {
         if (req.method === 'GET' && pathname === '/api/backup/config') {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(config));
+            return;
+        }
+        
+        // GET /api/backup/folders
+        if (req.method === 'GET' && pathname === '/api/backup/folders') {
+            const folders = [];
+            try {
+                const items = fs.readdirSync(OPENCLAW_DIR);
+                for (const item of items) {
+                    const itemPath = path.join(OPENCLAW_DIR, item);
+                    const stat = fs.statSync(itemPath);
+                    if (stat.isDirectory() && !item.startsWith('.')) {
+                        folders.push({ name: item, size: getDirSize(itemPath) });
+                    }
+                }
+            } catch (e) {}
+            folders.sort((a, b) => b.size - a.size);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ folders }));
             return;
         }
         

@@ -597,11 +597,24 @@
         }
         
         let selectedFolders = new Set();
-        const AVAILABLE_FOLDERS = [
-            'workspace', 'media', 'telegram', 'memory', 'canvas', 
-            'skills', 'credentials', 'agents', 'devices', 'identity',
-            'completions', 'cache', 'logs', 'backups', 'cron'
-        ];
+        let availableFolders = [];
+        
+        async function loadAvailableFolders() {
+            try {
+                const response = await fetch(`${API_BASE}/folders`);
+                const data = await response.json();
+                availableFolders = data.folders || [];
+            } catch (e) {
+                availableFolders = [];
+            }
+        }
+        
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+        }
         
         function toggleOptions() {
             const panel = document.getElementById('optionsPanel');
@@ -632,12 +645,26 @@
         
         function loadFolderCheckboxes() {
             const container = document.getElementById('folderCheckboxes');
-            container.innerHTML = AVAILABLE_FOLDERS.map(folder => `
-                <label style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;">
-                    <input type="checkbox" value="${folder}" onchange="toggleFolder('${folder}')" ${selectedFolders.has(folder) ? 'checked' : ''}>
-                    ${folder}
-                </label>
-            `).join('');
+            if (availableFolders.length === 0) {
+                container.innerHTML = '<div style="color:#888;font-size:0.85rem;">Loading folders...</div>';
+                loadAvailableFolders().then(() => {
+                    container.innerHTML = availableFolders.map(folder => `
+                        <label style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;">
+                            <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')" ${selectedFolders.has(folder.name) ? 'checked' : ''}>
+                            <span style="flex:1;">${folder.name}</span>
+                            <span style="color:#888;font-size:0.75rem;">${formatSize(folder.size)}</span>
+                        </label>
+                    `).join('');
+                });
+            } else {
+                container.innerHTML = availableFolders.map(folder => `
+                    <label style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;">
+                        <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')" ${selectedFolders.has(folder.name) ? 'checked' : ''}>
+                        <span style="flex:1;">${folder.name}</span>
+                        <span style="color:#888;font-size:0.75rem;">${formatSize(folder.size)}</span>
+                    </label>
+                `).join('');
+            }
         }
         
         function toggleFolder(folder) {
@@ -1079,6 +1106,7 @@
         refreshBackups();
         refreshSchedules();
         loadConfig();
+        loadAvailableFolders();
         
         // Auto refresh every 30 seconds
         setInterval(() => {
