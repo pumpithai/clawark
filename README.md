@@ -41,8 +41,15 @@ Then open: `http://localhost:3847`
 ### CLI
 
 ```bash
-# Create backup
+# Create full backup
 ./openclaw-backup.sh
+
+# Backup excluding specific folders
+./openclaw-backup.sh --exclude=workspace
+./openclaw-backup.sh --exclude=media --exclude=cache
+
+# Backup only specific folder
+./openclaw-backup.sh --include-only=skills
 
 # List backups
 ./openclaw-backup.sh --list
@@ -60,6 +67,8 @@ PORT=3847                   # Web UI port (default: 3847)
 ```
 
 ## Backup Contents
+
+Backups entire `.openclaw` directory with rsync, including:
 
 - `openclaw.json` - Main config
 - `credentials/` - API keys & tokens
