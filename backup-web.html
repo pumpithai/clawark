@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔙 OpenClaw Backup</title>
+    <title>OpenClaw Backup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0f0f1a;
@@ -13,45 +15,25 @@
             --accent-green: #00ff88;
             --accent-red: #ff6b6b;
             --accent-yellow: #ffc800;
+            --accent-purple: #a855f7;
             --text: #fff;
-            --text-dim: #888;
-            --border: rgba(255,255,255,0.1);
+            --text-dim: #8892a4;
+            --border: rgba(255,255,255,0.08);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text);
             min-height: 100vh;
-            padding: 20px;
-            background-image: 
-                radial-gradient(ellipse at top, #1a1a3e 0%, transparent 50%),
-                radial-gradient(ellipse at bottom right, #0a2a2a 0%, transparent 50%);
         }
         
         .container {
-            max-width: 1100px;
+            max-width: 1400px;
             margin: 0 auto;
-        }
-        
-        /* Main Grid Layout */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-        
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .content {
-            min-width: 0;
+            padding: 0 24px;
         }
         
         /* Header */
@@ -59,107 +41,62 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 20px 0;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
         }
         
-        header .header-left {
-            text-align: left;
-        }
-        
-        header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), var(--accent-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 4px;
-        }
-        
-        header p {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            margin: 0;
-        }
-        
-        header .header-right {
-            text-align: right;
-            font-size: 0.85rem;
-        }
-        
-        header .header-right a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        
-        header .header-right a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-        
-        .stat-card .icon {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        
-        .stat-card .value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        
-        .stat-card .label {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-        }
-        
-        /* Action Buttons */
-        .actions {
+        .logo {
             display: flex;
+            align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
         }
         
-        .btn {
-            flex: 1;
-            padding: 16px 24px;
-            border: none;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
             border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-green));
-            color: var(--bg-primary);
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            color: #000;
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
         }
         
         .btn-secondary {
@@ -172,205 +109,298 @@
             background: rgba(255,255,255,0.1);
         }
         
-        /* Card */
-        .card {
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            padding: 24px 0;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: var(--bg-card);
+            color: var(--text);
+        }
+        
+        .nav-item.active {
+            border-left: 3px solid var(--accent);
+        }
+        
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 20px;
         }
         
-        .card-header {
+        .stat-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .stat-card .icon.blue { background: rgba(0, 217, 255, 0.15); }
+        .stat-card .icon.green { background: rgba(0, 255, 136, 0.15); }
+        .stat-card .icon.purple { background: rgba(168, 85, 247, 0.15); }
+        .stat-card .icon.yellow { background: rgba(255, 200, 0, 0.15); }
+        
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .stat-card .label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        
+        /* Content */
+        .content {
+            min-width: 0;
+        }
+        
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
         }
         
-        .card-title {
+        .section-title {
             font-size: 1.1rem;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
-        /* Backup List */
-        .backup-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            overflow-y: auto;
-            scrollbar-width: none;
+        /* Table */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
         }
         
-        .backup-list::-webkit-scrollbar {
-            display: none;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .backup-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
+        th, td {
+            padding: 14px 20px;
+            text-align: left;
+        }
+        
+        th {
             background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            transition: all 0.2s;
+            font-weight: 500;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .backup-item:hover {
-            background: rgba(255,255,255,0.08);
+        tr {
+            border-bottom: 1px solid var(--border);
         }
         
-        .backup-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #2a2a4e, #1a1a3e);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            margin-right: 12px;
+        tr:last-child {
+            border-bottom: none;
         }
         
-        .backup-info {
-            flex: 1;
-            min-width: 0;
+        tr:hover {
+            background: rgba(255,255,255,0.02);
         }
         
         .backup-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-weight: 500;
         }
         
-        .backup-meta {
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge.manual { background: rgba(0, 217, 255, 0.15); color: var(--accent); }
+        .badge.auto { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn.restore { background: rgba(255, 200, 0, 0.15); color: var(--accent-yellow); }
+        .action-btn.download { background: rgba(0, 217, 255, 0.15); color: var(--accent); }
+        .action-btn.delete { background: rgba(255, 107, 107, 0.15); color: var(--accent-red); }
+        
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Options Panel */
+        .options-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: none;
+        }
+        
+        .options-panel.show {
+            display: block;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        
+        .option-group h4 {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
             color: var(--text-dim);
         }
         
-        .backup-actions {
+        .radio-group {
             display: flex;
-            gap: 4px;
+            flex-direction: column;
+            gap: 8px;
         }
         
-        .btn-sm {
-            padding: 6px 10px;
-            font-size: 0.75rem;
-            border-radius: 6px;
-        }
-        
-        .btn-restore {
-            background: rgba(255, 200, 0, 0.15);
-            color: var(--accent-yellow);
-            border: 1px solid var(--accent-yellow);
-        }
-        
-        .btn-download {
-            background: rgba(0, 217, 255, 0.15);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-        }
-        
-        .btn-delete {
-            background: rgba(255, 107, 107, 0.15);
-            color: var(--accent-red);
-            border: 1px solid var(--accent-red);
-        }
-        
-        /* Upload Area */
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            text-align: center;
-            transition: all 0.3s;
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
             cursor: pointer;
         }
         
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: rgba(0, 217, 255, 0.05);
+        .radio-item:hover {
+            background: rgba(255,255,255,0.06);
         }
         
-        .upload-area input {
-            display: none;
+        .radio-item input[type="radio"] {
+            accent-color: var(--accent);
         }
         
-        .upload-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
+        .folder-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 12px;
         }
         
-        .upload-text {
+        .folder-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        
+        .folder-item input {
+            accent-color: var(--accent);
+        }
+        
+        .folder-size {
+            margin-left: auto;
+            font-size: 0.7rem;
             color: var(--text-dim);
         }
         
-        .upload-text strong {
-            color: var(--accent);
-        }
-        
-        /* Status */
-        .status {
-            padding: 12px 16px;
-            border-radius: 8px;
+        .pattern-inputs {
             margin-top: 16px;
-            display: none;
-            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
         
-        .status.show { display: block; }
-        .status.success { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); }
-        .status.error { background: rgba(255, 107, 107, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); }
-        .status.loading { background: rgba(0, 217, 255, 0.1); border: 1px solid var(--accent); color: var(--accent); }
-        
-        /* Progress */
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 12px;
-            display: none;
+        .pattern-input {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
         
-        .progress-bar.show { display: block; }
+        .pattern-input label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-green));
-            width: 0%;
-            transition: width 0.3s ease;
+        .pattern-input input {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+        
+        .pattern-input input::placeholder {
+            color: var(--text-dim);
         }
         
         /* Empty State */
-        .empty {
+        .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: var(--text-dim);
         }
         
-        .empty-icon {
-            font-size: 3rem;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-        
-        /* Loading Spinner */
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+            opacity: 0.3;
         }
         
         /* Toast */
@@ -385,7 +415,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 16px 20px;
+            padding: 14px 20px;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -402,179 +432,226 @@
         .toast.success { border-left: 3px solid var(--accent-green); }
         .toast.error { border-left: 3px solid var(--accent-red); }
         
+        /* Progress */
+        .progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        
+        .progress-overlay.show {
+            display: flex;
+        }
+        
+        .progress-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            min-width: 320px;
+        }
+        
+        .progress-box h3 {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            margin-top: 12px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        
         /* Responsive */
-        @media (max-width: 800px) {
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .main-grid { grid-template-columns: 1fr; }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); }
-            .actions { flex-direction: column; }
-            .backup-item { flex-wrap: wrap; }
-            .backup-actions { width: 100%; margin-top: 12px; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 640px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .pattern-inputs { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
     
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-box">
+            <h3>Creating Backup...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Preparing...</div>
+        </div>
+    </div>
+    
     <div class="container">
         <header>
-            <div class="header-left">
-                <h1>🔙 OpenClaw Backup</h1>
-                <p>Backup & Restore your OpenClaw data</p>
+            <div class="logo">
+                <div class="logo-icon">💾</div>
+                <h1>Open<span>Claw</span> Backup</h1>
             </div>
-            <div class="header-right">
-                <div>dev by pumpith</div>
-                <a href="https://facebook.com/pumpith" target="_blank">📘 Facebook</a>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="toggleOptions()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Options
+                </button>
+                <button class="btn btn-primary" onclick="createBackup()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    New Backup
+                </button>
             </div>
         </header>
         
-        <!-- Actions -->
-        <div class="actions">
-            <button class="btn btn-primary" onclick="createBackup()">
-                ➕ Create Backup
-            </button>
-            <button class="btn btn-secondary" onclick="refreshBackups()">
-                🔄 Refresh
-            </button>
-            <button class="btn btn-secondary" onclick="toggleOptions()" id="optionsBtn">
-                ⚙️ Options
-            </button>
-        </div>
-        
-        <!-- Backup Options Panel -->
-        <div class="card" id="optionsPanel" style="display:none;">
-            <div class="card-header">
-                <div class="card-title">📁 Backup Options</div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon blue">📦</div>
+                <div class="value" id="totalBackups">0</div>
+                <div class="label">Total Backups</div>
             </div>
-            <div style="margin-bottom:16px;">
-                <label style="display:block;margin-bottom:8px;font-size:0.9rem;">Backup Mode:</label>
-                <div style="display:flex;gap:8px;">
-                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                        <input type="radio" name="backupMode" value="full" checked onchange="updateBackupMode()"> Full Backup
-                    </label>
-                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                        <input type="radio" name="backupMode" value="exclude" onchange="updateBackupMode()"> Exclude Folders
-                    </label>
-                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                        <input type="radio" name="backupMode" value="include" onchange="updateBackupMode()"> Include Only
-                    </label>
-                </div>
+            <div class="stat-card">
+                <div class="icon green">💾</div>
+                <div class="value" id="totalSize">0 KB</div>
+                <div class="label">Total Size</div>
             </div>
-            
-            <!-- Exclude/Include Selection -->
-            <div id="folderSelection" style="display:none;">
-                <label style="display:block;margin-bottom:8px;font-size:0.9rem;" id="folderSelectionLabel">Select folders to exclude:</label>
-                <div id="folderCheckboxes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;">
-                </div>
+            <div class="stat-card">
+                <div class="icon purple">📅</div>
+                <div class="value" id="lastBackup">-</div>
+                <div class="label">Last Backup</div>
             </div>
-            
-            <!-- Custom Patterns -->
-            <div class="card" style="margin-top:16px;background:rgba(255,255,255,0.03);">
-                <div class="card-title" style="margin-bottom:12px;">🎯 Custom Patterns</div>
-                
-                <div style="margin-bottom:12px;">
-                    <label style="display:block;font-size:0.8rem;color:#888;margin-bottom:4px;">Exclude by extension (e.g., .mp4, .log, .tmp)</label>
-                    <input type="text" id="excludeExt" placeholder=".mp4,.log,.tmp" style="width:100%;padding:8px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:6px;" onkeyup="updatePatternSummary()">
-                </div>
-                
-                <div style="margin-bottom:12px;">
-                    <label style="display:block;font-size:0.8rem;color:#888;margin-bottom:4px;">Exclude folders starting with (e.g., temp_, cache_)</label>
-                    <input type="text" id="excludePrefix" placeholder="temp_, cache_" style="width:100%;padding:8px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:6px;" onkeyup="updatePatternSummary()">
-                </div>
-                
-                <div>
-                    <label style="display:block;font-size:0.8rem;color:#888;margin-bottom:4px;">Exclude folders ending with (e.g., _bak, .bak)</label>
-                    <input type="text" id="excludeSuffix" placeholder="_bak, .bak" style="width:100%;padding:8px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:6px;" onkeyup="updatePatternSummary()">
-                </div>
-                
-                <div id="patternSummary" style="margin-top:12px;padding:8px;background:rgba(0,217,255,0.1);border-radius:6px;font-size:0.8rem;color:var(--accent);display:none;"></div>
-            </div>
-            
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid #333;">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                    <span style="color:#888;font-size:0.85rem;" id="selectedCount">0 folders selected</span>
-                    <button class="btn btn-sm" style="background:var(--accent);color:var(--bg-primary);" onclick="createBackup()">
-                        ✅ Apply & Backup
-                    </button>
-                </div>
+            <div class="stat-card">
+                <div class="icon yellow">⚡</div>
+                <div class="value" id="autoBackups">0</div>
+                <div class="label">Auto Backups</div>
             </div>
         </div>
         
-        <div class="progress-bar" id="progressBar">
-            <div class="progress-fill" id="progressFill"></div>
+        <!-- Options Panel -->
+        <div class="options-panel" id="optionsPanel">
+            <div class="options-grid">
+                <div class="option-group">
+                    <h4>Backup Mode</h4>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="backupMode" value="full" checked onchange="updateBackupMode()">
+                            <span>Full Backup</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="backupMode" value="exclude" onchange="updateBackupMode()">
+                            <span>Exclude Folders</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="backupMode" value="include" onchange="updateBackupMode()">
+                            <span>Include Only</span>
+                        </label>
+                    </div>
+                    
+                    <div class="folder-list" id="folderList"></div>
+                </div>
+                
+                <div class="option-group">
+                    <h4>Custom Patterns</h4>
+                    <div class="pattern-inputs">
+                        <div class="pattern-input">
+                            <label>Extensions (.mp4, .log)</label>
+                            <input type="text" id="excludeExt" placeholder=".mp4,.log">
+                        </div>
+                        <div class="pattern-input">
+                            <label>Prefixes (temp_, tmp)</label>
+                            <input type="text" id="excludePrefix" placeholder="temp_, tmp">
+                        </div>
+                        <div class="pattern-input">
+                            <label>Suffixes (_bak, .bak)</label>
+                            <input type="text" id="excludeSuffix" placeholder="_bak,.bak">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 12px;">
+                <button class="btn btn-secondary" onclick="toggleOptions()">Cancel</button>
+                <button class="btn btn-primary" onclick="createBackup()">Create Backup</button>
+            </div>
         </div>
         
-        <!-- Two Column Layout -->
+        <!-- Main Grid -->
         <div class="main-grid">
-            <!-- Left Sidebar -->
+            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Stats -->
-                <div class="stats-bar" style="grid-template-columns: repeat(2, 1fr);">
-                    <div class="stat-card">
-                        <div class="icon">📦</div>
-                        <div class="value" id="totalBackups">-</div>
-                        <div class="label">Backups</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">💾</div>
-                        <div class="value" id="totalSize">-</div>
-                        <div class="label">Size</div>
-                    </div>
+                <div class="nav-item active" onclick="showSection('backups')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span>Backups</span>
+                </div>
+                <div class="nav-item" onclick="showSection('schedules')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <span>Schedules</span>
+                </div>
+                <div class="nav-item" onclick="showSection('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Settings</span>
                 </div>
                 
-                <!-- Schedule -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">⏰ Auto Backup</div>
-                    </div>
-                    <select id="cronPreset" onchange="updateCronInput()" style="width:100%;padding:10px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:12px;">
-                        <option value="">-- Select --</option>
-                        <option value="0 * * * *">Every hour</option>
-                        <option value="0 0 * * *">Daily</option>
-                        <option value="0 0 * * 0">Weekly</option>
-                        <option value="0 0 1 * *">Monthly</option>
-                    </select>
-                    <button class="btn btn-sm" style="background:var(--accent);color:var(--bg-primary);width:100%;margin-bottom:12px;" onclick="addSchedule()">
-                        ➕ Add Schedule
-                    </button>
-                    <input type="text" id="cronInput" placeholder="* * * * *" style="width:100%;padding:10px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:8px;margin-bottom:12px;">
-                    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #333;">
-                        <label style="display:block;margin-bottom:6px;color:#888;font-size:12px;">Max Backups to Keep</label>
-                        <div style="display:flex;gap:8px;">
-                            <input type="number" id="maxBackups" min="1" max="100" style="flex:1;padding:8px;background:#1a1a2e;color:#fff;border:1px solid #333;border-radius:8px;">
-                            <button class="btn btn-sm" style="background:var(--accent);color:var(--bg-primary);padding:8px 16px;" onclick="saveConfig()">💾</button>
-                        </div>
-                    </div>
-                    <div id="scheduleList"></div>
-                </div>
-                
-                <!-- Upload -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">⬆️ Upload</div>
-                    </div>
-                    <label class="upload-area" id="uploadArea">
-                        <input type="file" id="uploadFile" accept=".tar.gz" onchange="handleFileSelect(event)">
-                        <div class="upload-icon">📂</div>
-                        <div class="upload-text">
-                            <strong>Click to upload</strong><br>
-                            <small>.tar.gz only</small>
-                        </div>
-                    </label>
-                    <div class="status" id="uploadStatus"></div>
+                <div style="margin-top: auto; padding: 16px; background: rgba(0,217,255,0.05); border-radius: 12px; border: 1px solid rgba(0,217,255,0.1);">
+                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px;">Quick Stats</div>
+                    <div style="font-size: 0.85rem;"><span style="color: var(--accent);" id="quickFolders">0</span> folders</div>
+                    <div style="font-size: 0.85rem;"><span style="color: var(--accent-green);" id="quickLast">-</span></div>
                 </div>
             </div>
             
-            <!-- Right Content - Backup History -->
+            <!-- Content -->
             <div class="content">
-                <div class="card" style="min-height: 400px;">
-                    <div class="card-header">
-                        <div class="card-title">📋 Backup History</div>
-                    </div>
-                    <div class="backup-list" id="backupList">
-                        <div class="empty">
-                            <div class="empty-icon">📭</div>
-                            <p>No backups found</p>
-                        </div>
+                <div class="section-header">
+                    <h2 class="section-title">Backup History</h2>
+                    <button class="btn btn-secondary" onclick="refreshBackups()">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        Refresh
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="backupList">
+                        </tbody>
+                    </table>
+                    
+                    <div class="empty-state" id="emptyState">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        <p>No backups found</p>
+                        <p style="font-size: 0.85rem;">Click "New Backup" to create one</p>
                     </div>
                 </div>
             </div>
@@ -583,9 +660,8 @@
 
     <script>
         const API_BASE = '/api/backup';
-        let selectedFile = null;
-        let currentPage = 1;
-        let totalPages = 1;
+        let selectedFolders = new Set();
+        let availableFolders = [];
         
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -596,19 +672,6 @@
             setTimeout(() => toast.remove(), 4000);
         }
         
-        let selectedFolders = new Set();
-        let availableFolders = [];
-        
-        async function loadAvailableFolders() {
-            try {
-                const response = await fetch(`${API_BASE}/folders`);
-                const data = await response.json();
-                availableFolders = data.folders || [];
-            } catch (e) {
-                availableFolders = [];
-            }
-        }
-        
         function formatSize(bytes) {
             if (bytes < 1024) return bytes + ' B';
             if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -616,55 +679,40 @@
             return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
         }
         
-        function toggleOptions() {
-            const panel = document.getElementById('optionsPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            if (panel.style.display === 'block') {
-                loadFolderCheckboxes();
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' min ago';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' hours ago';
+            if (diff < 604800000) return Math.floor(diff / 86400000) + ' days ago';
+            
+            return date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+        }
+        
+        async function loadAvailableFolders() {
+            try {
+                const response = await fetch(`${API_BASE}/folders`);
+                const data = await response.json();
+                availableFolders = data.folders || [];
+                document.getElementById('quickFolders').textContent = availableFolders.length;
+                renderFolderList();
+            } catch (e) {
+                availableFolders = [];
             }
         }
         
-        function updateBackupMode() {
-            const mode = document.querySelector('input[name="backupMode"]:checked').value;
-            const selection = document.getElementById('folderSelection');
-            const label = document.getElementById('folderSelectionLabel');
-            
-            selectedFolders.clear();
-            
-            if (mode === 'full') {
-                selection.style.display = 'none';
-            } else {
-                selection.style.display = 'block';
-                label.textContent = mode === 'exclude' 
-                    ? 'Select folders to exclude:' 
-                    : 'Select folders to include:';
-            }
-            loadFolderCheckboxes();
-            updateSelectedCount();
-        }
-        
-        function loadFolderCheckboxes() {
-            const container = document.getElementById('folderCheckboxes');
-            if (availableFolders.length === 0) {
-                container.innerHTML = '<div style="color:#888;font-size:0.85rem;">Loading folders...</div>';
-                loadAvailableFolders().then(() => {
-                    container.innerHTML = availableFolders.map(folder => `
-                        <label style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;">
-                            <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')" ${selectedFolders.has(folder.name) ? 'checked' : ''}>
-                            <span style="flex:1;">${folder.name}</span>
-                            <span style="color:#888;font-size:0.75rem;">${formatSize(folder.size)}</span>
-                        </label>
-                    `).join('');
-                });
-            } else {
-                container.innerHTML = availableFolders.map(folder => `
-                    <label style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;">
-                        <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')" ${selectedFolders.has(folder.name) ? 'checked' : ''}>
-                        <span style="flex:1;">${folder.name}</span>
-                        <span style="color:#888;font-size:0.75rem;">${formatSize(folder.size)}</span>
-                    </label>
-                `).join('');
-            }
+        function renderFolderList() {
+            const container = document.getElementById('folderList');
+            container.innerHTML = availableFolders.map(folder => `
+                <label class="folder-item">
+                    <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')">
+                    <span>${folder.name}</span>
+                    <span class="folder-size">${formatSize(folder.size)}</span>
+                </label>
+            `).join('');
         }
         
         function toggleFolder(folder) {
@@ -673,61 +721,17 @@
             } else {
                 selectedFolders.add(folder);
             }
-            updateSelectedCount();
-            loadFolderCheckboxes();
         }
         
-        function updateSelectedCount() {
-            const count = selectedFolders.size;
-            document.getElementById('selectedCount').textContent = 
-                count === 0 ? 'No folders selected' : `${count} folder${count > 1 ? 's' : ''} selected`;
+        function updateBackupMode() {
+            const mode = document.querySelector('input[name="backupMode"]:checked').value;
+            const folderList = document.getElementById('folderList');
+            folderList.style.display = mode === 'full' ? 'none' : 'grid';
         }
         
-        function updatePatternSummary() {
-            const ext = document.getElementById('excludeExt').value.trim();
-            const prefix = document.getElementById('excludePrefix').value.trim();
-            const suffix = document.getElementById('excludeSuffix').value.trim();
-            
-            const patterns = [];
-            if (ext) patterns.push(`Extensions: ${ext}`);
-            if (prefix) patterns.push(`Prefixes: ${prefix}`);
-            if (suffix) patterns.push(`Suffixes: ${suffix}`);
-            
-            const summary = document.getElementById('patternSummary');
-            if (patterns.length > 0) {
-                summary.innerHTML = patterns.join(' | ');
-                summary.style.display = 'block';
-            } else {
-                summary.style.display = 'none';
-            }
-        }
-        
-        function getCustomPatterns() {
-            return {
-                excludeExt: document.getElementById('excludeExt').value.split(',').map(s => s.trim()).filter(Boolean),
-                excludePrefix: document.getElementById('excludePrefix').value.split(',').map(s => s.trim()).filter(Boolean),
-                excludeSuffix: document.getElementById('excludeSuffix').value.split(',').map(s => s.trim()).filter(Boolean)
-            };
-        }
-        
-        function showStatus(id, message, type) {
-            const el = document.getElementById(id);
-            el.className = `status show ${type}`;
-            el.innerHTML = type === 'loading' ? `<span class="spinner"></span>${message}` : message;
-        }
-        
-        function hideStatus(id) {
-            document.getElementById(id).className = 'status';
-        }
-        
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (file) {
-                selectedFile = file;
-                document.querySelector('.upload-text').innerHTML = 
-                    `<strong>${file.name}</strong><br><small>${(file.size/1024).toFixed(1)} KB</small>`;
-                uploadBackup();
-            }
+        function toggleOptions() {
+            const panel = document.getElementById('optionsPanel');
+            panel.classList.toggle('show');
         }
         
         async function createBackup() {
@@ -740,16 +744,21 @@
                 options.includeOnly = Array.from(selectedFolders)[0];
             }
             
-            const patterns = getCustomPatterns();
-            if (patterns.excludeExt.length > 0) options.excludeExt = patterns.excludeExt;
-            if (patterns.excludePrefix.length > 0) options.excludePrefix = patterns.excludePrefix;
-            if (patterns.excludeSuffix.length > 0) options.excludeSuffix = patterns.excludeSuffix;
+            const ext = document.getElementById('excludeExt').value.split(',').map(s => s.trim()).filter(Boolean);
+            const prefix = document.getElementById('excludePrefix').value.split(',').map(s => s.trim()).filter(Boolean);
+            const suffix = document.getElementById('excludeSuffix').value.split(',').map(s => s.trim()).filter(Boolean);
             
-            showStatus('uploadStatus', 'Creating backup...', 'loading');
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
-            progressBar.classList.add('show');
-            progressFill.style.width = '30%';
+            if (ext.length) options.excludeExt = ext;
+            if (prefix.length) options.excludePrefix = prefix;
+            if (suffix.length) options.excludeSuffix = suffix;
+            
+            const overlay = document.getElementById('progressOverlay');
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            
+            overlay.classList.add('show');
+            fill.style.width = '30%';
+            text.textContent = 'Creating backup...';
             
             try {
                 const response = await fetch(`${API_BASE}/create`, {
@@ -757,142 +766,77 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(options)
                 });
-                progressFill.style.width = '80%';
+                
+                fill.style.width = '80%';
                 const data = await response.json();
-                progressFill.style.width = '100%';
+                fill.style.width = '100%';
                 
                 if (data.success) {
-                    const parts = [];
-                    if (options.exclude) parts.push(`excluded: ${options.exclude.join(', ')}`);
-                    if (options.includeOnly) parts.push(`included: ${options.includeOnly}`);
-                    if (patterns.excludeExt.length > 0) parts.push(`no ext: ${patterns.excludeExt.join(', ')}`);
-                    if (patterns.excludePrefix.length > 0) parts.push(`no prefix: ${patterns.excludePrefix.join(', ')}`);
-                    if (patterns.excludeSuffix.length > 0) parts.push(`no suffix: ${patterns.excludeSuffix.join(', ')}`);
-                    const optText = parts.length > 0 ? `(${parts.join(' | ')})` : '(full backup)';
-                    showToast(`✅ Backup created: ${data.filename} ${optText}`);
-                    showStatus('uploadStatus', '', '');
+                    showToast('Backup created successfully!');
                 } else {
-                    showStatus('uploadStatus', `❌ Error: ${data.error}`, 'error');
+                    showToast('Error: ' + data.error, 'error');
                 }
             } catch (err) {
-                showStatus('uploadStatus', `❌ Error: ${err.message}`, 'error');
+                showToast('Error: ' + err.message, 'error');
             }
             
             setTimeout(() => {
-                progressBar.classList.remove('show');
-                progressFill.style.width = '0%';
+                overlay.classList.remove('show');
+                fill.style.width = '0%';
+                toggleOptions();
                 refreshBackups();
-            }, 1500);
-        }
-        
-        async function uploadBackup() {
-            if (!selectedFile) return;
-            
-            showStatus('uploadStatus', 'Uploading...', 'loading');
-            
-            try {
-                const response = await fetch(`${API_BASE}/upload`, {
-                    method: 'POST',
-                    headers: { 'Content-Disposition': `attachment; filename="${selectedFile.name}"` },
-                    body: selectedFile
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showToast(`✅ Upload complete: ${data.filename}`);
-                    showStatus('uploadStatus', '', '');
-                    selectedFile = null;
-                    document.getElementById('uploadFile').value = '';
-                    document.querySelector('.upload-text').innerHTML = 
-                        '<strong>Click to upload</strong> or drag and drop<br><small>Only .tar.gz files allowed</small>';
-                    refreshBackups();
-                } else {
-                    showStatus('uploadStatus', `❌ Error: ${data.error}`, 'error');
-                }
-            } catch (err) {
-                showStatus('uploadStatus', `❌ Error: ${err.message}`, 'error');
-            }
+            }, 1000);
         }
         
         async function refreshBackups() {
             try {
-                const response = await fetch(`${API_BASE}/list?page=${currentPage}&limit=10`);
+                const response = await fetch(`${API_BASE}/list?page=1&limit=100`);
                 const data = await response.json();
                 
                 const backups = data.backups || [];
-                totalPages = data.totalPages || 1;
+                const totalBackups = backups.length;
+                const totalSize = backups.reduce((acc, b) => acc + parseFloat(b.size), 0);
+                const autoBackups = backups.filter(b => b.type === 'auto').length;
                 
-                const list = document.getElementById('backupList');
+                document.getElementById('totalBackups').textContent = totalBackups;
+                document.getElementById('totalSize').textContent = formatSize(totalSize * 1024);
+                document.getElementById('autoBackups').textContent = autoBackups;
+                document.getElementById('quickLast').textContent = totalBackups > 0 ? formatDate(backups[0].timestamp) : '-';
                 
-                // Update stats
-                const totalBackupsEl = document.getElementById('totalBackups');
-                const totalSizeEl = document.getElementById('totalSize');
-                
-                if (totalBackupsEl) totalBackupsEl.textContent = data.total || 0;
-                if (totalSizeEl) {
-                    // Get all backups for total size
-                    const allResponse = await fetch(`${API_BASE}/list?page=1&limit=1000`);
-                    const allData = await allResponse.json();
-                    const totalSize = (allData.backups || []).reduce((acc, b) => acc + parseFloat(b.size), 0);
-                    totalSizeEl.textContent = totalSize > 1024 ? (totalSize/1024).toFixed(1) + ' MB' : totalSize.toFixed(1) + ' KB';
+                if (backups.length > 0) {
+                    document.getElementById('lastBackup').textContent = formatDate(backups[0].timestamp);
                 }
                 
+                const list = document.getElementById('backupList');
+                const empty = document.getElementById('emptyState');
+                
                 if (backups.length === 0) {
-                    list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>No backups found</p></div>';
+                    list.innerHTML = '';
+                    empty.style.display = 'block';
                     return;
                 }
                 
-                list.innerHTML = backups.map((backup, i) => `
-                    <div class="backup-item">
-                        <div class="backup-icon">🗜️</div>
-                        <div class="backup-info">
-                            <div class="backup-name">${backup.name} <span style="color:#888;font-size:0.75rem;">(${backup.type || 'manual'})</span></div>
-                            <div class="backup-meta">${backup.size} • ${backup.date}</div>
-                        </div>
-                        <div class="backup-actions">
-                            <button class="btn btn-sm btn-restore" onclick="restoreBackup('${backup.name}')">
-                                ♻️
-                            </button>
-                            <button class="btn btn-sm btn-download" onclick="downloadBackup('${backup.name}')">
-                                ⬇️
-                            </button>
-                            <button class="btn btn-sm btn-delete" onclick="deleteBackup('${backup.name}')">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
+                empty.style.display = 'none';
+                list.innerHTML = backups.map(b => `
+                    <tr>
+                        <td class="backup-name">${b.name.replace('.tar.gz', '')}</td>
+                        <td><span class="badge ${b.type}">${b.type}</span></td>
+                        <td>${b.size}</td>
+                        <td>${formatDate(b.timestamp)}</td>
+                        <td>
+                            <button class="action-btn restore" onclick="restoreBackup('${b.name}')">Restore</button>
+                            <button class="action-btn download" onclick="downloadBackup('${b.name}')">Download</button>
+                            <button class="action-btn delete" onclick="deleteBackup('${b.name}')">Delete</button>
+                        </td>
+                    </tr>
                 `).join('');
-                
-                // Add pagination
-                if (totalPages > 1) {
-                    list.innerHTML += `
-                        <div class="pagination" style="display:flex;justify-content:center;gap:8px;margin-top:16px;align-items:center;">
-                            <button class="btn btn-sm btn-secondary" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>◀</button>
-                            <span style="color:#888;font-size:0.85rem;">${currentPage} / ${totalPages}</span>
-                            <button class="btn btn-sm btn-secondary" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>▶</button>
-                        </div>
-                    `;
-                }
             } catch (err) {
                 console.error(err);
             }
         }
         
-        function goToPage(page) {
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            refreshBackups();
-        }
-        
         async function restoreBackup(filename) {
-            if (!confirm(`⚠️ Restore "${filename}"?\n\nThis will overwrite current data!`)) return;
-            
-            // Show progress modal
-            const modal = document.getElementById('restoreModal') || createRestoreModal();
-            modal.style.display = 'flex';
-            const progressBar = document.getElementById('restoreProgress');
-            const progressText = document.getElementById('restoreStatus');
+            if (!confirm(`Restore "${filename}"? This will overwrite current data.`)) return;
             
             try {
                 const response = await fetch(`${API_BASE}/restore`, {
@@ -900,54 +844,13 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ filename })
                 });
-                
                 const data = await response.json();
-                if (!data.success) {
-                    showToast(`❌ Error: ${data.error}`, 'error');
-                    modal.style.display = 'none';
-                    return;
-                }
-                
-                // Poll for status
-                while (true) {
-                    await new Promise(r => setTimeout(r, 500));
-                    const statusRes = await fetch(`${API_BASE}/restore/status`);
-                    const status = await statusRes.json();
-                    
-                    progressBar.style.width = status.progress + '%';
-                    progressText.textContent = status.message;
-                    
-                    if (!status.inProgress) {
-                        modal.style.display = 'none';
-                        if (status.error) {
-                            showToast(`❌ ${status.error}`, 'error');
-                        } else {
-                            showToast('✅ Restore complete!');
-                        }
-                        break;
-                    }
+                if (data.success) {
+                    showToast('Restore started...');
                 }
             } catch (err) {
-                showToast(`❌ Error: ${err.message}`, 'error');
-                modal.style.display = 'none';
+                showToast('Error: ' + err.message, 'error');
             }
-        }
-        
-        function createRestoreModal() {
-            const modal = document.createElement('div');
-            modal.id = 'restoreModal';
-            modal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center;';
-            modal.innerHTML = `
-                <div style="background:#1a1a2e;padding:30px;border-radius:12px;width:400px;text-align:center;">
-                    <h3 style="margin:0 0 20px;">🔄 Restoring...</h3>
-                    <div style="background:#0f0f1a;border-radius:8px;height:24px;overflow:hidden;margin-bottom:15px;">
-                        <div id="restoreProgress" style="width:0%;height:100%;background:linear-gradient(90deg,#00d9ff,#00ff88);transition:width 0.3s;"></div>
-                    </div>
-                    <p id="restoreStatus" style="color:#888;margin:0;">Starting...</p>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            return modal;
         }
         
         function downloadBackup(filename) {
@@ -961,158 +864,21 @@
                 const response = await fetch(`${API_BASE}/delete/${filename}`, { method: 'DELETE' });
                 const data = await response.json();
                 if (data.success) {
-                    showToast('✅ Deleted');
+                    showToast('Backup deleted');
                     refreshBackups();
-                } else {
-                    showToast(`❌ Error: ${data.error}`, 'error');
-                }
-            } catch (err) {
-                showToast(`❌ Error: ${err.message}`, 'error');
-            }
-        }
-        
-        function openBackupFolder() {
-            window.open('file:///home/cloudm9n/.openclaw/backups', '_blank');
-        }
-        
-        function updateCronInput() {
-            const preset = document.getElementById('cronPreset').value;
-            if (preset) {
-                document.getElementById('cronInput').value = preset;
-            }
-        }
-        
-        function getCronLabel(cron) {
-            const parts = cron.split(' ');
-            if (parts.length < 5) return cron;
-            const [min, hour, dom, mon, dow] = parts;
-            
-            if (cron.startsWith('*/')) {
-                const interval = min.replace('*/', '');
-                return `⏰ Every ${interval} min`;
-            }
-            if (min === '*' && hour === '*') return '⏰ Every minute';
-            if (min === '0' && hour === '*') return '⏰ Every hour';
-            if (min === '0' && hour === '0' && dom === '*' && mon === '*') return '⏰ Daily';
-            if (min === '0' && hour === '0' && dow === '0') return '⏰ Weekly';
-            if (min === '0' && hour === '0' && dom === '1' && mon === '*') return '⏰ Monthly';
-            
-            return `⏰ ${cron}`;
-        }
-        
-        
-        async function addSchedule() {
-            const cron = document.getElementById('cronInput').value;
-            if (!cron) {
-                showToast('Please enter a cron expression', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/schedules`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cron, enabled: true })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    showToast('✅ Schedule added');
-                    document.getElementById('cronInput').value = '';
-                    document.getElementById('cronPreset').value = '';
-                    refreshSchedules();
                 }
             } catch (err) {
                 showToast('Error: ' + err.message, 'error');
             }
         }
         
-        async function refreshSchedules() {
-            try {
-                const response = await fetch(`${API_BASE}/schedules`);
-                const data = await response.json();
-                const list = document.getElementById('scheduleList');
-                
-                if (!data.schedules || data.schedules.length === 0) {
-                    list.innerHTML = '<div style="color:#888;font-size:0.85rem;">No schedules</div>';
-                    return;
-                }
-                
-                list.innerHTML = data.schedules.map(s => {
-                    const label = getCronLabel(s.cron);
-                    return `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(255,255,255,0.05);border-radius:6px;margin-bottom:6px;">
-                        <span style="font-size:0.85rem;">${label}</span>
-                        <button onclick="deleteSchedule('${s.id}')" style="background:transparent;border:none;color:#ff6b6b;cursor:pointer;">✕</button>
-                    </div>
-                `}).join('');
-            } catch (err) {
-                console.error(err);
-            }
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
         }
         
-        async function deleteSchedule(id) {
-            try {
-                const response = await fetch(`${API_BASE}/schedules/${id}`, { method: 'DELETE' });
-                const data = await response.json();
-                if (data.success) {
-                    showToast('✅ Schedule removed');
-                    refreshSchedules();
-                }
-            } catch (err) {
-                showToast('Error: ' + err.message, 'error');
-            }
-        }
-        
-        // Drag and drop
-        const uploadArea = document.getElementById('uploadArea');
-        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = '#00d9ff'; });
-        uploadArea.addEventListener('dragleave', e => { e.preventDefault(); uploadArea.style.borderColor = ''; });
-        uploadArea.addEventListener('drop', e => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '';
-            const file = e.dataTransfer.files[0];
-            if (file && file.name.endsWith('.tar.gz')) {
-                selectedFile = file;
-                uploadBackup();
-            }
-        });
-        
-        async function loadConfig() {
-            try {
-                const response = await fetch(`${API_BASE}/config`);
-                const config = await response.json();
-                document.getElementById('maxBackups').value = config.maxBackups || 10;
-            } catch (e) {
-                console.error('Failed to load config:', e);
-            }
-        }
-        
-        async function saveConfig() {
-            try {
-                const maxBackups = parseInt(document.getElementById('maxBackups').value) || 10;
-                const response = await fetch(`${API_BASE}/config`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ maxBackups })
-                });
-                const config = await response.json();
-                showToast('✅ Settings saved!');
-            } catch (e) {
-                showToast(`❌ Error: ${e.message}`, 'error');
-            }
-        }
-        
-        // Initial load
         refreshBackups();
-        refreshSchedules();
-        loadConfig();
         loadAvailableFolders();
-        
-        // Auto refresh every 30 seconds
-        setInterval(() => {
-            refreshBackups();
-            refreshSchedules();
-        }, 30000);
     </script>
 </body>
 </html>
