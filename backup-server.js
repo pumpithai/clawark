@@ -9,15 +9,24 @@ const execPromise = util.promisify(exec);
 
 const HOME_DIR = os.homedir();
 const OPENCLAW_DIR = path.join(HOME_DIR, '.openclaw');
+const SCRIPT_DIR = __dirname;
 const BACKUP_DIR = process.env.BACKUP_DIR || path.join(OPENCLAW_DIR, 'backups');
 const CRON_DIR = process.env.CRON_DIR || path.join(OPENCLAW_DIR, 'cron');
-const CONFIG_FILE = path.join(BACKUP_DIR, 'config.json');
+const CONFIG_FILE = path.join(SCRIPT_DIR, 'config.json');
 const PORT = process.env.PORT || 3847;
 
-// Default config
-let config = {
+// Default config (all in one file)
+let allConfig = {
     maxBackups: 10,
-    maxBackupsSize: 0  // 0 = no limit
+    maxBackupsSize: 0,
+    patterns: [
+        '.log', '.tmp', '.temp', '.cache',
+        '.bak', '_bak',
+        '.DS_Store', 'Thumbs.db',
+        '*.log', '*.tmp',
+        'backup', 'backups'
+    ],
+    schedules: []
 };
 
 // Load config
@@ -31,12 +40,23 @@ function loadConfig() {
 
 // Save config
 function saveConfig() {
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(allConfig, null, 2));
+}
+
+// Load all config
+function loadAllConfig() {
+    try {
+        if (fs.existsSync(CONFIG_FILE)) {
+            allConfig = { ...allConfig, ...JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8')) };
+        } else {
+            saveConfig();
+        }
+    } catch (e) {}
 }
 
 // Cleanup old backups
 function cleanupBackups() {
-    if (config.maxBackups <= 0) return;
+    if (allConfig.maxBackups <= 0) return;
     
     // Get all auto backups sorted by time
     const allFiles = fs.readdirSync(BACKUP_DIR)
@@ -63,8 +83,8 @@ function cleanupBackups() {
     const autoFiles = allFiles.filter(f => f.type === 'auto');
     
     // Cleanup auto backups over limit
-    if (autoFiles.length > config.maxBackups) {
-        const toDelete = autoFiles.slice(config.maxBackups);
+    if (autoFiles.length > allConfig.maxBackups) {
+        const toDelete = autoFiles.slice(allConfig.maxBackups);
         toDelete.forEach(f => {
             try {
                 fs.unlinkSync(f.path);
@@ -82,7 +102,7 @@ function cleanupBackups() {
 // Ensure backup directory exists before any file operations
 fs.mkdirSync(BACKUP_DIR, { recursive: true });
 
-loadConfig();
+loadAllConfig();
 
 // Restore status tracking
 let restoreStatus = {
@@ -176,47 +196,31 @@ function getDirSize(dirPath) {
 // Create backup
 async function createBackup(type = 'manual', options = {}) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const suffix = options.exclude ? `_excl_${options.exclude.join('-')}` 
-        : options.includeOnly ? `_only_${options.includeOnly}` 
-        : '';
+    const patterns = options.patterns || [];
+    const suffix = patterns.length > 0 ? `_patterns_${patterns.length}` : '';
     const backupName = `openclaw_${type}_backup_${timestamp}${suffix}`;
     const backupPath = path.join(BACKUP_DIR, backupName);
     
     fs.mkdirSync(backupPath, { recursive: true });
     
-    const excludeFolders = options.exclude || [];
-    const includeOnly = options.includeOnly || null;
-    const excludeExt = options.excludeExt || [];
-    const excludePrefix = options.excludePrefix || [];
-    const excludeSuffix = options.excludeSuffix || [];
+    let rsyncOpts = `-a --exclude=.git --exclude=node_modules --exclude=.openclaw --exclude='backups' --exclude='${backupName}'`;
     
-    const foldersToProcess = [
-        'openclaw.json', 'credentials', 'agents', 'workspace', 'telegram',
-        'cron', 'devices', 'identity', 'memory', 'canvas', 'completions',
-        'media', 'skills', 'backups'
-    ];
-    
-    for (const item of foldersToProcess) {
-        if (includeOnly && item !== includeOnly && item !== 'openclaw.json') continue;
-        if (excludeFolders.includes(item)) continue;
-        
-        const src = path.join(OPENCLAW_DIR, item);
-        const dest = path.join(backupPath, item);
-        
-        if (!fs.existsSync(src)) continue;
-        
-        if (item === 'openclaw.json') {
-            fs.copyFileSync(src, dest);
+    for (const p of patterns) {
+        const pattern = p;
+        if (pattern.startsWith('.')) {
+            rsyncOpts += ` --exclude='*${pattern}'`;
+        } else if (pattern.startsWith('*')) {
+            rsyncOpts += ` --exclude='*${pattern.slice(1)}'`;
+        } else if (pattern.endsWith('*')) {
+            rsyncOpts += ` --exclude='${pattern.slice(0, -1)}*'`;
+        } else if (pattern.includes('*')) {
+            rsyncOpts += ` --exclude='${pattern}'`;
         } else {
-            fs.mkdirSync(dest, { recursive: true });
-            copyDirWithPatterns(src, dest, {
-                alwaysExclude: item === 'workspace' ? ['.git', 'node_modules', '.openclaw'] : [],
-                excludeExt,
-                excludePrefix,
-                excludeSuffix
-            });
+            rsyncOpts += ` --exclude='${pattern}' --exclude='${pattern}/*'`;
         }
     }
+    
+    await execPromise(`rsync ${rsyncOpts} '${OPENCLAW_DIR}/' '${backupPath}/'`);
     
     const tarPath = path.join(BACKUP_DIR, `${backupName}.tar.gz`);
     await execPromise(`tar -czf "${tarPath}" -C "${BACKUP_DIR}" "${backupName}"`);
@@ -226,78 +230,13 @@ async function createBackup(type = 'manual', options = {}) {
     const metaPath = path.join(BACKUP_DIR, `${backupName}.json`);
     fs.writeFileSync(metaPath, JSON.stringify({ 
         type, 
-        excluded: options.exclude || [], 
-        includedOnly: options.includeOnly || null,
-        excludeExt: options.excludeExt || [],
-        excludePrefix: options.excludePrefix || [],
-        excludeSuffix: options.excludeSuffix || [],
+        patterns,
         created: new Date().toISOString() 
     }));
     
     cleanupBackups();
     
     return `${backupName}.tar.gz`;
-}
-
-// Copy directory with custom pattern exclusions
-function copyDirWithPatterns(src, dest, patterns = {}) {
-    if (!fs.existsSync(src)) return;
-    
-    const { alwaysExclude = [], excludeExt = [], excludePrefix = [], excludeSuffix = [] } = patterns;
-    
-    const shouldExclude = (name, isDir) => {
-        if (alwaysExclude.includes(name)) return true;
-        
-        if (isDir) {
-            if (excludePrefix.some(p => name.startsWith(p))) return true;
-            if (excludeSuffix.some(s => name.endsWith(s))) return true;
-        } else {
-            const lower = name.toLowerCase();
-            if (excludeExt.some(ext => lower.endsWith(ext.toLowerCase()))) return true;
-            if (excludePrefix.some(p => lower.startsWith(p.toLowerCase()))) return true;
-            if (excludeSuffix.some(s => lower.endsWith(s.toLowerCase()))) return true;
-        }
-        
-        return false;
-    };
-    
-    const items = fs.readdirSync(src);
-    for (const item of items) {
-        if (shouldExclude(item, false)) continue;
-        
-        const srcPath = path.join(src, item);
-        const destPath = path.join(dest, item);
-        const stat = fs.statSync(srcPath);
-        
-        if (stat.isDirectory()) {
-            if (shouldExclude(item, true)) continue;
-            fs.mkdirSync(destPath, { recursive: true });
-            copyDirWithPatterns(srcPath, destPath, patterns);
-        } else {
-            fs.copyFileSync(srcPath, destPath);
-        }
-    }
-}
-
-// Copy directory recursively
-function copyDir(src, dest, exclude = []) {
-    if (!fs.existsSync(src)) return;
-    
-    const items = fs.readdirSync(src);
-    for (const item of items) {
-        if (exclude.includes(item)) continue;
-        
-        const srcPath = path.join(src, item);
-        const destPath = path.join(dest, item);
-        const stat = fs.statSync(srcPath);
-        
-        if (stat.isDirectory()) {
-            fs.mkdirSync(destPath, { recursive: true });
-            copyDir(srcPath, destPath, exclude);
-        } else {
-            fs.copyFileSync(srcPath, destPath);
-        }
-    }
 }
 
 // Restore backup
@@ -549,32 +488,15 @@ async function restoreBackup(filename) {
 
 // Schedule functions
 function listSchedules() {
-    const schedules = [];
-    const cronFile = path.join(CRON_DIR, 'backup.json');
-    
-    if (fs.existsSync(cronFile)) {
-        try {
-            const data = JSON.parse(fs.readFileSync(cronFile, 'utf8'));
-            return data.schedules || [];
-        } catch (e) {
-            return [];
-        }
-    }
-    return [];
+    return allConfig.schedules || [];
 }
 
 function syncCrontab(schedules) {
     const enabledSchedules = schedules.filter(s => s.enabled);
     
-    // Remove existing backup schedules from file to prevent duplicates
-    const cronFile = path.join(CRON_DIR, 'backup.json');
-    if (fs.existsSync(cronFile)) {
-        try {
-            const existingData = JSON.parse(fs.readFileSync(cronFile, 'utf8'));
-            // Keep only the new schedules we're about to add
-            fs.writeFileSync(cronFile, JSON.stringify({ schedules: enabledSchedules }, null, 2));
-        } catch (e) {}
-    }
+    // Update schedules in config
+    allConfig.schedules = schedules;
+    saveConfig();
     
     // Remove existing backup cron entries
     let currentCrontab = '';
@@ -682,11 +604,9 @@ const server = http.createServer(async (req, res) => {
                     const data = JSON.parse(body || '{}');
                     type = data.type || 'manual';
                     options = { 
+                        patterns: data.patterns || [],
                         exclude: data.exclude, 
-                        includeOnly: data.includeOnly,
-                        excludeExt: data.excludeExt,
-                        excludePrefix: data.excludePrefix,
-                        excludeSuffix: data.excludeSuffix
+                        includeOnly: data.includeOnly
                     };
                 } catch (e) {
                     // Use default
@@ -823,6 +743,28 @@ const server = http.createServer(async (req, res) => {
                 cleanupBackups();
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(config));
+            });
+            return;
+        }
+        
+        // GET /api/backup/options
+        if (req.method === 'GET' && pathname === '/api/backup/options') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ patterns: allConfig.patterns, maxBackups: allConfig.maxBackups }));
+            return;
+        }
+        
+        // POST /api/backup/options
+        if (req.method === 'POST' && pathname === '/api/backup/options') {
+            let body = '';
+            req.on('data', chunk => body += chunk);
+            req.on('end', () => {
+                const newOptions = JSON.parse(body);
+                if (newOptions.patterns) allConfig.patterns = newOptions.patterns;
+                if (newOptions.maxBackups) allConfig.maxBackups = newOptions.maxBackups;
+                saveConfig();
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ patterns: allConfig.patterns, maxBackups: allConfig.maxBackups }));
             });
             return;
         }

@@ -1,409 +1,277 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenClaw Backup</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        
         :root {
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: #16213e;
-            --accent: #00d9ff;
-            --accent-green: #00ff88;
-            --accent-red: #ff6b6b;
-            --accent-yellow: #ffc800;
-            --accent-purple: #a855f7;
-            --text: #fff;
-            --text-dim: #8892a4;
-            --border: rgba(255,255,255,0.08);
+            --bg: #0a0a0f;
+            --bg-card: #111118;
+            --border: #1e1e2e;
+            --text: #cdd6f4;
+            --text-dim: #6c7086;
+            --accent: #89b4fa;
+            --green: #a6e3a1;
+            --yellow: #f9e2af;
+            --red: #f38ba8;
+            --cyan: #94e2d5;
+            --purple: #cba6f7;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        
-        .logo h1 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .logo span {
-            color: var(--accent);
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-            color: #000;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
-        }
-        
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        /* Main Layout */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 24px;
-            padding: 24px 0;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .nav-item:hover, .nav-item.active {
-            background: var(--bg-card);
-            color: var(--text);
-        }
-        
-        .nav-item.active {
-            border-left: 3px solid var(--accent);
-        }
-        
-        .nav-item svg {
-            width: 20px;
-            height: 20px;
-        }
-        
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
             padding: 20px;
         }
         
-        .stat-card .icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        
+        .header-title {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            font-size: 1.2rem;
+            gap: 12px;
+            margin-bottom: 8px;
         }
         
-        .stat-card .icon.blue { background: rgba(0, 217, 255, 0.15); }
-        .stat-card .icon.green { background: rgba(0, 255, 136, 0.15); }
-        .stat-card .icon.purple { background: rgba(168, 85, 247, 0.15); }
-        .stat-card .icon.yellow { background: rgba(255, 200, 0, 0.15); }
-        
-        .stat-card .value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        
-        .stat-card .label {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-        
-        /* Content */
-        .content {
-            min-width: 0;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .section-title {
-            font-size: 1.1rem;
+        .header-title h1 {
+            font-size: 18px;
             font-weight: 600;
+            color: var(--green);
         }
         
-        /* Table */
-        .table-container {
+        .header-subtitle {
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        
+        .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 8px;
             overflow: hidden;
         }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 14px 20px;
-            text-align: left;
-        }
-        
-        th {
-            background: rgba(255,255,255,0.03);
-            font-weight: 500;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        tr {
+        .card-header {
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border);
-        }
-        
-        tr:last-child {
-            border-bottom: none;
-        }
-        
-        tr:hover {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             background: rgba(255,255,255,0.02);
         }
         
-        .backup-name {
-            font-weight: 500;
+        .card-header .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
         
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+        .dot.red { background: var(--red); }
+        .dot.yellow { background: var(--yellow); }
+        .dot.green { background: var(--green); }
+        
+        .card-header h2 {
+            font-size: 13px;
             font-weight: 500;
+            color: var(--text);
+            margin-left: 8px;
         }
         
-        .badge.manual { background: rgba(0, 217, 255, 0.15); color: var(--accent); }
-        .badge.auto { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
+        .card-body {
+            padding: 16px;
+        }
         
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.8rem;
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         
-        .action-btn.restore { background: rgba(255, 200, 0, 0.15); color: var(--accent-yellow); }
-        .action-btn.download { background: rgba(0, 217, 255, 0.15); color: var(--accent); }
-        .action-btn.delete { background: rgba(255, 107, 107, 0.15); color: var(--accent-red); }
-        
-        .action-btn:hover {
-            transform: scale(1.05);
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
         
-        /* Options Panel */
-        .options-panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            display: none;
+        .btn-primary {
+            background: var(--green);
+            border-color: var(--green);
+            color: var(--bg);
         }
         
-        .options-panel.show {
-            display: block;
+        .btn-primary:hover {
+            background: #b4ebaf;
+            border-color: #b4ebaf;
+            color: var(--bg);
         }
         
-        .options-grid {
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
         }
         
-        .option-group h4 {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            color: var(--text-dim);
+        .stat {
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            border: 1px solid var(--border);
         }
+        
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+        
+        .backup-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .backup-list::-webkit-scrollbar { width: 6px; }
+        .backup-list::-webkit-scrollbar-track { background: var(--bg); }
+        .backup-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        
+        .backup-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        
+        .backup-item:hover { background: rgba(255,255,255,0.03); }
+        .backup-item:last-child { border-bottom: none; }
+        
+        .backup-icon { color: var(--yellow); margin-right: 12px; }
+        
+        .backup-info { flex: 1; min-width: 0; }
+        
+        .backup-name {
+            font-size: 12px;
+            color: var(--text);
+            word-break: break-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .backup-meta { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        
+        .backup-actions { display: flex; gap: 4px; margin-left: 8px; }
+        
+        .btn-xs { padding: 4px 8px; font-size: 11px; }
+        .btn-success { border-color: var(--green); color: var(--green); }
+        .btn-success:hover { background: var(--green); color: var(--bg); }
+        .btn-info { border-color: var(--cyan); color: var(--cyan); }
+        .btn-info:hover { background: var(--cyan); color: var(--bg); }
+        .btn-danger { border-color: var(--red); color: var(--red); }
+        .btn-danger:hover { background: var(--red); color: var(--bg); }
         
         .radio-group {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
         
-        .radio-item {
+        .radio-label {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
+            gap: 6px;
             cursor: pointer;
+            font-size: 13px;
         }
         
-        .radio-item:hover {
-            background: rgba(255,255,255,0.06);
-        }
-        
-        .radio-item input[type="radio"] {
-            accent-color: var(--accent);
-        }
+        .radio-label input { accent-color: var(--accent); }
         
         .folder-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 8px;
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
-            margin-top: 12px;
         }
         
         .folder-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 12px;
+            padding: 8px 10px;
             background: rgba(255,255,255,0.03);
-            border-radius: 6px;
-            font-size: 0.85rem;
-        }
-        
-        .folder-item input {
-            accent-color: var(--accent);
-        }
-        
-        .folder-size {
-            margin-left: auto;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-        }
-        
-        .pattern-inputs {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        
-        .pattern-input {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .pattern-input label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-        
-        .pattern-input input {
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.05);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-size: 0.85rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
-        .pattern-input input::placeholder {
-            color: var(--text-dim);
-        }
+        .folder-item:hover { border-color: var(--accent); }
+        .folder-item.selected { border-color: var(--green); background: rgba(166, 227, 161, 0.1); }
+        .folder-item input { accent-color: var(--green); }
+        .folder-name { flex: 1; font-size: 12px; }
+        .folder-size { font-size: 10px; color: var(--text-dim); }
         
-        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             color: var(--text-dim);
         }
         
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 16px;
-            opacity: 0.3;
-        }
+        .empty-state .icon { font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
         
-        /* Toast */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -414,14 +282,14 @@
         .toast {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px 20px;
-            margin-bottom: 10px;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             animation: slideIn 0.3s ease;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            font-size: 13px;
         }
         
         @keyframes slideIn {
@@ -429,247 +297,318 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        .toast.success { border-left: 3px solid var(--accent-green); }
-        .toast.error { border-left: 3px solid var(--accent-red); }
+        .toast.success { border-color: var(--green); }
+        .toast.success::before { content: '>'; color: var(--green); }
+        .toast.error { border-color: var(--red); }
+        .toast.error::before { content: '>'; color: var(--red); }
         
-        /* Progress */
-        .progress-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-        }
-        
-        .progress-overlay.show {
-            display: flex;
-        }
-        
-        .progress-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            text-align: center;
-            min-width: 320px;
-        }
-        
-        .progress-box h3 {
-            margin-bottom: 20px;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
+        .progress {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
             overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .progress-text {
             margin-top: 12px;
+            display: none;
+        }
+        
+        .progress.show { display: block; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--green)); width: 0%; transition: width 0.3s; }
+        
+        .pattern-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+        }
+        
+        .pattern-section h3 { font-size: 11px; color: var(--yellow); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .form-group { margin-bottom: 12px; }
+        
+        .form-label {
+            display: block;
+            font-size: 11px;
             color: var(--text-dim);
-            font-size: 0.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .main-grid { grid-template-columns: 1fr; }
-            .options-grid { grid-template-columns: 1fr; }
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
         }
         
-        @media (max-width: 640px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .pattern-inputs { grid-template-columns: 1fr; }
+        .form-input:focus { outline: none; border-color: var(--accent); }
+        
+        .tag-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            min-height: 40px;
+            align-items: center;
         }
+        
+        .tag-input-wrapper:focus-within { border-color: var(--accent); }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: rgba(137, 180, 250, 0.15);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--accent);
+        }
+        
+        .tag .tag-remove {
+            cursor: pointer;
+            opacity: 0.7;
+            font-size: 14px;
+            line-height: 1;
+        }
+        
+        .tag .tag-remove:hover { opacity: 1; }
+        
+        .tag-input {
+            flex: 1;
+            min-width: 80px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+        
+        .tag-input::placeholder { color: var(--text-dim); }
+        
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .upload-zone:hover { border-color: var(--accent); background: rgba(137, 180, 250, 0.05); }
+        .upload-zone.dragover { border-color: var(--green); background: rgba(166, 227, 161, 0.1); }
+        
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 24px; margin-bottom: 8px; color: var(--text-dim); }
+        .upload-text { font-size: 12px; color: var(--text-dim); }
+        .upload-text strong { color: var(--accent); }
+        
+        .upload-status {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .upload-status.show { display: block; }
+        .upload-status.loading { background: rgba(137, 180, 250, 0.1); color: var(--accent); }
+        .upload-status.success { background: rgba(166, 227, 161, 0.1); color: var(--green); }
+        .upload-status.error { background: rgba(243, 139, 168, 0.1); color: var(--red); }
+        
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 11px;
+        }
+        
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
     
-    <div class="progress-overlay" id="progressOverlay">
-        <div class="progress-box">
-            <h3>Creating Backup...</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-text" id="progressText">Preparing...</div>
-        </div>
-    </div>
-    
     <div class="container">
-        <header>
-            <div class="logo">
-                <div class="logo-icon">💾</div>
-                <h1>Open<span>Claw</span> Backup</h1>
+        <header style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div class="header-title">
+                    <span style="color: var(--accent);">~</span>
+                    <h1>openclaw-backup</h1>
+                </div>
+                <div class="header-subtitle">// backup & restore system</div>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="toggleOptions()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    Options
-                </button>
-                <button class="btn btn-primary" onclick="createBackup()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    New Backup
-                </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="createBackup()">> run backup</button>
             </div>
         </header>
         
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="icon blue">📦</div>
-                <div class="value" id="totalBackups">0</div>
-                <div class="label">Total Backups</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon green">💾</div>
-                <div class="value" id="totalSize">0 KB</div>
-                <div class="label">Total Size</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon purple">📅</div>
-                <div class="value" id="lastBackup">-</div>
-                <div class="label">Last Backup</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon yellow">⚡</div>
-                <div class="value" id="autoBackups">0</div>
-                <div class="label">Auto Backups</div>
-            </div>
-        </div>
-        
-        <!-- Options Panel -->
-        <div class="options-panel" id="optionsPanel">
-            <div class="options-grid">
-                <div class="option-group">
-                    <h4>Backup Mode</h4>
-                    <div class="radio-group">
-                        <label class="radio-item">
-                            <input type="radio" name="backupMode" value="full" checked onchange="updateBackupMode()">
-                            <span>Full Backup</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="backupMode" value="exclude" onchange="updateBackupMode()">
-                            <span>Exclude Folders</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="backupMode" value="include" onchange="updateBackupMode()">
-                            <span>Include Only</span>
-                        </label>
+        <div class="grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Actions Card -->
+                <div class="card" style="height: 195px;">
+                    <div class="card-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <h2>stats</h2>
                     </div>
-                    
-                    <div class="folder-list" id="folderList"></div>
+                    <div class="card-body">
+                        <div class="progress" id="progressBar">
+                            <div class="progress-bar" id="progressFill"></div>
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-label">backups</div>
+                                <div class="stat-value" id="totalBackups">-</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">total size</div>
+                                <div class="stat-value" id="totalSize">-</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="option-group">
-                    <h4>Custom Patterns</h4>
-                    <div class="pattern-inputs">
-                        <div class="pattern-input">
-                            <label>Extensions (.mp4, .log)</label>
-                            <input type="text" id="excludeExt" placeholder=".mp4,.log">
+                <!-- Options Card -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <h2>options.cfg</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">auto backup versions</label>
+                            <input type="number" class="form-input" id="maxBackups" placeholder="10" min="1" style="width: 100%;">
                         </div>
-                        <div class="pattern-input">
-                            <label>Prefixes (temp_, tmp)</label>
-                            <input type="text" id="excludePrefix" placeholder="temp_, tmp">
+                        <div class="form-group">
+                            <label class="form-label">exclude patterns</label>
+                            <div class="tag-input-wrapper">
+                                <div class="tags-container" id="tagsPatterns"></div>
+                                <input type="text" class="tag-input" id="inputPattern" placeholder="add pattern..." onkeydown="addPattern(event)">
+                            </div>
                         </div>
-                        <div class="pattern-input">
-                            <label>Suffixes (_bak, .bak)</label>
-                            <input type="text" id="excludeSuffix" placeholder="_bak,.bak">
+                        <div style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">
+                            e.g.: <code style="color: var(--accent);">.log</code> <code style="color: var(--accent);">temp_*</code> <code style="color: var(--accent);">*_backup</code>
                         </div>
+                        <div class="btn-row">
+                            <button class="btn btn-primary" onclick="saveOptions()">save</button>
+                            <button class="btn" onclick="clearOptions()">clear</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Schedule Card -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <h2>schedule.cron</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="cronInput" placeholder="0 0 * * *">
+                        </div>
+                        <select class="form-input" id="cronPreset" onchange="setCronPreset()">
+                            <option value="">-- presets --</option>
+                            <option value="0 * * * *">hourly</option>
+                            <option value="0 0 * * *">daily</option>
+                            <option value="0 0 * * 0">weekly</option>
+                            <option value="0 0 1 * *">monthly</option>
+                        </select>
+                        <div class="btn-row">
+                            <button class="btn btn-success" onclick="addSchedule()">+ add</button>
+                        </div>
+                        <div id="scheduleList" style="margin-top: 12px;"></div>
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 12px;">
-                <button class="btn btn-secondary" onclick="toggleOptions()">Cancel</button>
-                <button class="btn btn-primary" onclick="createBackup()">Create Backup</button>
-            </div>
-        </div>
-        
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="nav-item active" onclick="showSection('backups')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    <span>Backups</span>
-                </div>
-                <div class="nav-item" onclick="showSection('schedules')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    <span>Schedules</span>
-                </div>
-                <div class="nav-item" onclick="showSection('settings')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    <span>Settings</span>
-                </div>
-                
-                <div style="margin-top: auto; padding: 16px; background: rgba(0,217,255,0.05); border-radius: 12px; border: 1px solid rgba(0,217,255,0.1);">
-                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px;">Quick Stats</div>
-                    <div style="font-size: 0.85rem;"><span style="color: var(--accent);" id="quickFolders">0</span> folders</div>
-                    <div style="font-size: 0.85rem;"><span style="color: var(--accent-green);" id="quickLast">-</span></div>
-                </div>
-            </div>
-            
-            <!-- Content -->
-            <div class="content">
-                <div class="section-header">
-                    <h2 class="section-title">Backup History</h2>
-                    <button class="btn btn-secondary" onclick="refreshBackups()">
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                        Refresh
-                    </button>
+            <!-- Right Column -->
+            <div>
+                <!-- Upload Card -->
+                <div class="card" style="height: 195px;">
+                    <div class="card-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <h2>upload.tar.gz</h2>
+                    </div>
+                    <div class="card-body">
+                        <label class="upload-zone" id="uploadZone">
+                            <input type="file" id="uploadInput" accept=".tar.gz" onchange="handleUpload(this.files[0])">
+                            <div class="upload-icon">[+]</div>
+                            <div class="upload-text">
+                                <strong>click to upload</strong><br>
+                                <small>.tar.gz files only</small>
+                            </div>
+                        </label>
+                        <div class="upload-status" id="uploadStatus"></div>
+                    </div>
                 </div>
                 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th>Size</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="backupList">
-                        </tbody>
-                    </table>
-                    
-                    <div class="empty-state" id="emptyState">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        <p>No backups found</p>
-                        <p style="font-size: 0.85rem;">Click "New Backup" to create one</p>
+                <!-- Backups Card -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <h2>backups/</h2>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <div class="backup-list" id="backupList" style="max-height: none; min-height: 590px;">
+                            <div class="empty-state">
+                                <div class="icon">[ ]</div>
+                                <div>no backups found</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-top: 1px solid var(--border);">
+                            <span style="color: var(--text-dim); font-size: 12px;" id="backupInfo"></span>
+                            <div id="pagination" style="display: flex; gap: 4px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <footer>
+            openclaw-backup v1.0 | dev by pumpith
+        </footer>
     </div>
 
     <script>
-        const API_BASE = '/api/backup';
+        const API = '/api/backup';
+        let folders = [];
         let selectedFolders = new Set();
-        let availableFolders = [];
         
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 4000);
+        function showToast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.textContent = msg;
+            c.appendChild(t);
+            setTimeout(function() { t.remove(); }, 3000);
         }
         
         function formatSize(bytes) {
@@ -679,206 +618,373 @@
             return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
         }
         
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const now = new Date();
-            const diff = now - date;
-            
-            if (diff < 60000) return 'Just now';
-            if (diff < 3600000) return Math.floor(diff / 60000) + ' min ago';
-            if (diff < 86400000) return Math.floor(diff / 3600000) + ' hours ago';
-            if (diff < 604800000) return Math.floor(diff / 86400000) + ' days ago';
-            
-            return date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+        var patterns = [];
+        
+        function addPattern(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                var input = document.getElementById('inputPattern');
+                var val = input.value.trim().replace(',', '');
+                if (!val) return;
+                
+                if (!patterns.includes(val)) {
+                    patterns.push(val);
+                    renderPatterns();
+                }
+                input.value = '';
+            }
         }
         
-        async function loadAvailableFolders() {
+        function removePattern(index) {
+            patterns.splice(index, 1);
+            renderPatterns();
+        }
+        
+        function renderPatterns() {
+            var container = document.getElementById('tagsPatterns');
+            container.innerHTML = patterns.map(function(p, i) {
+                return '<span class="tag">' + p + '<span class="tag-remove" onclick="removePattern(' + i + ')">x</span></span>';
+            }).join('');
+        }
+        
+        async function saveOptions() {
+            var maxBackups = document.getElementById('maxBackups').value;
+            var opts = { 
+                patterns: patterns,
+                maxBackups: maxBackups ? parseInt(maxBackups) : 10
+            };
             try {
-                const response = await fetch(`${API_BASE}/folders`);
-                const data = await response.json();
-                availableFolders = data.folders || [];
-                document.getElementById('quickFolders').textContent = availableFolders.length;
-                renderFolderList();
+                await fetch(API + '/options', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(opts)
+                });
+                showToast('options saved');
             } catch (e) {
-                availableFolders = [];
+                showToast('failed to save', 'error');
             }
         }
         
-        function renderFolderList() {
-            const container = document.getElementById('folderList');
-            container.innerHTML = availableFolders.map(folder => `
-                <label class="folder-item">
-                    <input type="checkbox" value="${folder.name}" onchange="toggleFolder('${folder.name}')">
-                    <span>${folder.name}</span>
-                    <span class="folder-size">${formatSize(folder.size)}</span>
-                </label>
-            `).join('');
-        }
-        
-        function toggleFolder(folder) {
-            if (selectedFolders.has(folder)) {
-                selectedFolders.delete(folder);
-            } else {
-                selectedFolders.add(folder);
+        async function loadOptions() {
+            try {
+                var res = await fetch(API + '/options');
+                var opts = await res.json();
+                if (opts.patterns) patterns = opts.patterns;
+                if (opts.maxBackups) document.getElementById('maxBackups').value = opts.maxBackups;
+                renderPatterns();
+            } catch (e) {
+                console.error('Failed to load options:', e);
             }
         }
         
-        function updateBackupMode() {
-            const mode = document.querySelector('input[name="backupMode"]:checked').value;
-            const folderList = document.getElementById('folderList');
-            folderList.style.display = mode === 'full' ? 'none' : 'grid';
+        async function clearOptions() {
+            patterns = [];
+            document.getElementById('maxBackups').value = '10';
+            renderPatterns();
+            try {
+                await fetch(API + '/options', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ patterns: [], maxBackups: 10 })
+                });
+                showToast('options cleared');
+            } catch (e) {
+                showToast('failed to clear', 'error');
+            }
         }
         
-        function toggleOptions() {
-            const panel = document.getElementById('optionsPanel');
-            panel.classList.toggle('show');
+        function getOptions() {
+            if (patterns.length > 0) return { patterns: patterns };
+            return {};
         }
         
         async function createBackup() {
-            const mode = document.querySelector('input[name="backupMode"]:checked').value;
-            let options = {};
+            var opts = getOptions();
+            var pb = document.getElementById('progressBar');
+            var pf = document.getElementById('progressFill');
             
-            if (mode === 'exclude' && selectedFolders.size > 0) {
-                options.exclude = Array.from(selectedFolders);
-            } else if (mode === 'include' && selectedFolders.size > 0) {
-                options.includeOnly = Array.from(selectedFolders)[0];
-            }
-            
-            const ext = document.getElementById('excludeExt').value.split(',').map(s => s.trim()).filter(Boolean);
-            const prefix = document.getElementById('excludePrefix').value.split(',').map(s => s.trim()).filter(Boolean);
-            const suffix = document.getElementById('excludeSuffix').value.split(',').map(s => s.trim()).filter(Boolean);
-            
-            if (ext.length) options.excludeExt = ext;
-            if (prefix.length) options.excludePrefix = prefix;
-            if (suffix.length) options.excludeSuffix = suffix;
-            
-            const overlay = document.getElementById('progressOverlay');
-            const fill = document.getElementById('progressFill');
-            const text = document.getElementById('progressText');
-            
-            overlay.classList.add('show');
-            fill.style.width = '30%';
-            text.textContent = 'Creating backup...';
+            pb.classList.add('show');
+            pf.style.width = '30%';
             
             try {
-                const response = await fetch(`${API_BASE}/create`, {
+                var res = await fetch(API + '/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(options)
+                    body: JSON.stringify(opts)
                 });
-                
-                fill.style.width = '80%';
-                const data = await response.json();
-                fill.style.width = '100%';
+                pf.style.width = '80%';
+                var data = await res.json();
+                pf.style.width = '100%';
                 
                 if (data.success) {
-                    showToast('Backup created successfully!');
+                    showToast('backup created: ' + data.filename);
+                    refreshBackups();
                 } else {
-                    showToast('Error: ' + data.error, 'error');
+                    showToast(data.error || 'error', 'error');
                 }
-            } catch (err) {
-                showToast('Error: ' + err.message, 'error');
+            } catch (e) {
+                showToast(e.message, 'error');
             }
             
-            setTimeout(() => {
-                overlay.classList.remove('show');
-                fill.style.width = '0%';
-                toggleOptions();
-                refreshBackups();
-            }, 1000);
+            setTimeout(function() {
+                pb.classList.remove('show');
+                pf.style.width = '0%';
+            }, 1500);
         }
         
-        async function refreshBackups() {
+        var currentPage = 1;
+        var totalPages = 1;
+        var allBackupsTotalSize = 0;
+        
+        async function refreshBackups(page) {
+            page = page || 1;
+            currentPage = page;
             try {
-                const response = await fetch(`${API_BASE}/list?page=1&limit=100`);
-                const data = await response.json();
+                var res = await fetch(API + '/list?page=' + page + '&limit=10');
+                var data = await res.json();
+                var list = document.getElementById('backupList');
+                document.getElementById('totalBackups').textContent = data.total || 0;
                 
-                const backups = data.backups || [];
-                const totalBackups = backups.length;
-                const totalSize = backups.reduce((acc, b) => acc + parseFloat(b.size), 0);
-                const autoBackups = backups.filter(b => b.type === 'auto').length;
-                
-                document.getElementById('totalBackups').textContent = totalBackups;
-                document.getElementById('totalSize').textContent = formatSize(totalSize * 1024);
-                document.getElementById('autoBackups').textContent = autoBackups;
-                document.getElementById('quickLast').textContent = totalBackups > 0 ? formatDate(backups[0].timestamp) : '-';
-                
-                if (backups.length > 0) {
-                    document.getElementById('lastBackup').textContent = formatDate(backups[0].timestamp);
+                if (page === 1 && data.total > 0) {
+                    var allRes = await fetch(API + '/list?page=1&limit=' + data.total);
+                    var allData = await allRes.json();
+                    allBackupsTotalSize = 0;
+                    if (allData.backups) {
+                        allData.backups.forEach(function(b) {
+                            var sizeNum = parseFloat(b.size);
+                            if (!isNaN(sizeNum)) {
+                                if (b.size.indexOf('KB') > -1) allBackupsTotalSize += sizeNum * 1024;
+                                else if (b.size.indexOf('MB') > -1) allBackupsTotalSize += sizeNum * 1024 * 1024;
+                                else if (b.size.indexOf('GB') > -1) allBackupsTotalSize += sizeNum * 1024 * 1024 * 1024;
+                                else allBackupsTotalSize += sizeNum;
+                            }
+                        });
+                    }
                 }
+                document.getElementById('totalSize').textContent = formatSize(allBackupsTotalSize);
+                document.getElementById('backupInfo').textContent = 'page ' + data.page + ' of ' + data.totalPages + ' (' + data.total + ' total)';
                 
-                const list = document.getElementById('backupList');
-                const empty = document.getElementById('emptyState');
+                totalPages = data.totalPages || 1;
                 
-                if (backups.length === 0) {
-                    list.innerHTML = '';
-                    empty.style.display = 'block';
+                if (!data.backups || data.backups.length === 0) {
+                    list.innerHTML = '<div class="empty-state"><div class="icon">[ ]</div><div>no backups found</div></div>';
+                    renderPagination();
                     return;
                 }
                 
-                empty.style.display = 'none';
-                list.innerHTML = backups.map(b => `
-                    <tr>
-                        <td class="backup-name">${b.name.replace('.tar.gz', '')}</td>
-                        <td><span class="badge ${b.type}">${b.type}</span></td>
-                        <td>${b.size}</td>
-                        <td>${formatDate(b.timestamp)}</td>
-                        <td>
-                            <button class="action-btn restore" onclick="restoreBackup('${b.name}')">Restore</button>
-                            <button class="action-btn download" onclick="downloadBackup('${b.name}')">Download</button>
-                            <button class="action-btn delete" onclick="deleteBackup('${b.name}')">Delete</button>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (err) {
-                console.error(err);
+                list.innerHTML = data.backups.map(function(b) {
+                    return '<div class="backup-item">' +
+                        '<div class="backup-icon">[*]</div>' +
+                        '<div class="backup-info">' +
+                            '<div class="backup-name">' + b.name + '</div>' +
+                            '<div class="backup-meta">' + b.size + ' | ' + b.date + ' | ' + (b.type || 'manual') + '</div>' +
+                        '</div>' +
+                        '<div class="backup-actions">' +
+                            '<button class="btn btn-xs btn-success" onclick="restoreBackup(\'' + b.name + '\')">restore</button>' +
+                            '<button class="btn btn-xs btn-info" onclick="downloadBackup(\'' + b.name + '\')">get</button>' +
+                            '<button class="btn btn-xs btn-danger" onclick="deleteBackup(\'' + b.name + '\')">del</button>' +
+                        '</div>' +
+                    '</div>';
+                }).join('');
+                
+                renderPagination();
+            } catch (e) {
+                console.error('Error:', e);
             }
         }
         
-        async function restoreBackup(filename) {
-            if (!confirm(`Restore "${filename}"? This will overwrite current data.`)) return;
+        function renderPagination() {
+            var pg = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                pg.innerHTML = '';
+                return;
+            }
             
+            var html = '';
+            var start = Math.max(1, currentPage - 2);
+            var end = Math.min(totalPages, currentPage + 2);
+            
+            if (currentPage > 1) {
+                html += '<button class="btn btn-xs" onclick="refreshBackups(' + (currentPage - 1) + ')">&lt;</button>';
+            }
+            
+            if (start > 1) {
+                html += '<button class="btn btn-xs" onclick="refreshBackups(1)">1</button>';
+                if (start > 2) html += '<span style="color: var(--text-dim);">...</span>';
+            }
+            
+            for (var i = start; i <= end; i++) {
+                if (i === currentPage) {
+                    html += '<button class="btn btn-xs" style="background: var(--accent); color: var(--bg);">' + i + '</button>';
+                } else {
+                    html += '<button class="btn btn-xs" onclick="refreshBackups(' + i + ')">' + i + '</button>';
+                }
+            }
+            
+            if (end < totalPages) {
+                if (end < totalPages - 1) html += '<span style="color: var(--text-dim);">...</span>';
+                html += '<button class="btn btn-xs" onclick="refreshBackups(' + totalPages + ')">' + totalPages + '</button>';
+            }
+            
+            if (currentPage < totalPages) {
+                html += '<button class="btn btn-xs" onclick="refreshBackups(' + (currentPage + 1) + ')">&gt;</button>';
+            }
+            
+            pg.innerHTML = html;
+        }
+        
+        async function restoreBackup(name) {
+            if (!confirm('restore "' + name + '"?\n\nThis will overwrite current data!')) return;
             try {
-                const response = await fetch(`${API_BASE}/restore`, {
+                await fetch(API + '/restore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ filename })
+                    body: JSON.stringify({ filename: name })
                 });
-                const data = await response.json();
-                if (data.success) {
-                    showToast('Restore started...');
-                }
-            } catch (err) {
-                showToast('Error: ' + err.message, 'error');
+                showToast('restore started...');
+            } catch (e) {
+                showToast(e.message, 'error');
             }
         }
         
-        function downloadBackup(filename) {
-            window.open(`${API_BASE}/download/${filename}`, '_blank');
+        function downloadBackup(name) {
+            window.open(API + '/download/' + name, '_blank');
         }
         
-        async function deleteBackup(filename) {
-            if (!confirm(`Delete "${filename}"?`)) return;
-            
+        async function deleteBackup(name) {
+            if (!confirm('delete "' + name + '"?')) return;
             try {
-                const response = await fetch(`${API_BASE}/delete/${filename}`, { method: 'DELETE' });
-                const data = await response.json();
+                var res = await fetch(API + '/delete/' + name, { method: 'DELETE' });
+                var data = await res.json();
                 if (data.success) {
-                    showToast('Backup deleted');
+                    showToast('deleted: ' + name);
                     refreshBackups();
                 }
-            } catch (err) {
-                showToast('Error: ' + err.message, 'error');
+            } catch (e) {
+                showToast(e.message, 'error');
             }
         }
         
-        function showSection(section) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            event.target.closest('.nav-item').classList.add('active');
+        function setCronPreset() {
+            var val = document.getElementById('cronPreset').value;
+            if (val) document.getElementById('cronInput').value = val;
         }
         
+        async function addSchedule() {
+            var cron = document.getElementById('cronInput').value.trim();
+            if (!cron) return;
+            try {
+                await fetch(API + '/schedules', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cron: cron, enabled: true })
+                });
+                showToast('schedule added');
+                refreshSchedules();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+        
+        async function refreshSchedules() {
+            try {
+                var res = await fetch(API + '/schedules');
+                var data = await res.json();
+                var el = document.getElementById('scheduleList');
+                
+                if (!data.schedules || data.schedules.length === 0) {
+                    el.innerHTML = '';
+                    return;
+                }
+                
+                el.innerHTML = data.schedules.map(function(s) {
+                    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;">' +
+                        '<span style="color:var(--cyan);font-size:12px;">' + s.cron + '</span>' +
+                        '<button onclick="delSchedule(\'' + s.id + '\')" style="background:none;border:none;color:var(--red);cursor:pointer;font-family:inherit;">[x]</button>' +
+                    '</div>';
+                }).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        
+        async function delSchedule(id) {
+            try {
+                await fetch(API + '/schedules/' + id, { method: 'DELETE' });
+                refreshSchedules();
+            } catch (e) {}
+        }
+        
+        // Upload functions
+        function handleUpload(file) {
+            if (!file) return;
+            
+            var status = document.getElementById('uploadStatus');
+            status.className = 'upload-status show loading';
+            status.textContent = 'uploading... ' + file.name;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', API + '/upload', true);
+            
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    var percent = Math.round((e.loaded / e.total) * 100);
+                    status.textContent = 'uploading... ' + percent + '%';
+                }
+            };
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.success) {
+                        status.className = 'upload-status show success';
+                        status.textContent = 'upload complete: ' + data.filename;
+                        showToast('uploaded: ' + data.filename);
+                        refreshBackups();
+                        document.getElementById('uploadInput').value = '';
+                    } else {
+                        status.className = 'upload-status show error';
+                        status.textContent = data.error || 'upload failed';
+                    }
+                } else {
+                    status.className = 'upload-status show error';
+                    status.textContent = 'upload failed';
+                }
+            };
+            
+            xhr.onerror = function() {
+                status.className = 'upload-status show error';
+                status.textContent = 'network error';
+            };
+            
+            xhr.send(file);
+        }
+        
+        // Drag and drop
+        var uploadZone = document.getElementById('uploadZone');
+        uploadZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        uploadZone.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+        });
+        uploadZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            var file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.tar.gz')) {
+                handleUpload(file);
+            } else {
+                showToast('only .tar.gz files allowed', 'error');
+            }
+        });
+        
+        // Init
+        loadOptions();
         refreshBackups();
-        loadAvailableFolders();
+        refreshSchedules();
     </script>
 </body>
 </html>
