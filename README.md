@@ -20,7 +20,7 @@
 ```bash
 # Clone to ~/.openclaw/
 cd ~/.openclaw
-git clone https://github.com/pumpithai/clawark.git
+git clone https://github.com/pumpithai/claw-ark.git
 cd claw-ark
 
 # Run installer
