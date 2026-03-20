@@ -582,12 +582,13 @@ const server = http.createServer(async (req, res) => {
                     const data = JSON.parse(body || '{}');
                     type = data.type || 'manual';
                     options = { 
-                        patterns: data.patterns || [],
+                        patterns: data.patterns || allConfig.patterns || [],
                         exclude: data.exclude, 
                         includeOnly: data.includeOnly
                     };
                 } catch (e) {
-                    // Use default
+                    // Use default from config
+                    options = { patterns: allConfig.patterns || [] };
                 }
                 log('info', `Starting backup: ${type}`);
                 const filename = await createBackup(type, options);
