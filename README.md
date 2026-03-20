@@ -28,6 +28,16 @@ chmod +x install.sh
 ./install.sh
 ```
 
+## Install sshpass ใช้สำหรับ Transfer 
+
+```bash
+# Ubuntu/Debian
+sudo apt install sshpass
+
+# macOS
+brew install sshpass
+```
+
 ## Usage | การใช้งาน
 
 ### Web UI
@@ -167,16 +177,6 @@ tail -f logs/app.log
 - sshpass (สำหรับ transfer)
 - tar
 - cron
-
-## Install sshpass
-
-```bash
-# Ubuntu/Debian
-sudo apt install sshpass
-
-# macOS
-brew install sshpass
-```
 
 ## License
 
